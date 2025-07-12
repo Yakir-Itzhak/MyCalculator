@@ -36,11 +36,8 @@ public class Main {
 
     public List<String> getList(String userInput){
         List<String> tokens = new ArrayList<>();
-        Matcher matcher = Pattern.compile("\\(|\\)|-*\\d+(\\.\\d*)*|[+*x/^\\-]").matcher(userInput);
+        Matcher matcher = Pattern.compile("\\(|\\)|-\\d+(\\.\\d*)*|[+*x/^\\-]").matcher(userInput);
         while(matcher.find()){
-            if(matcher.group().matches("-\\d+(\\.\\d*)*")){
-                tokens.add("+");
-            }
             tokens.add(matcher.group());
         }
         while(tokens.contains("(")){
@@ -142,6 +139,17 @@ public class Main {
             return finalAnswer;
         }
 
+    }
+    public List<String> power(<String> tokens){
+        for (int i = tokens.size()-1; i>=0; i--) {
+            if (tokens.get(i).equals("^")) {
+                A = String.valueOf(Math.pow(Double.parseDouble(tokens.get(i - 1)), Double.parseDouble(tokens.get(i + 1))));
+                tokens.set(i - 1, A);
+                tokens.remove(i);
+                tokens.remove(i);
+                i--;
+            }
+        }
     }
     int releaseAnswer(int A){
         System.out.println(A);
