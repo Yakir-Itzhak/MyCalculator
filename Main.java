@@ -36,26 +36,16 @@ public class Main {
 
     public List<String> getList(String userInput){
         List<String> tokens = new ArrayList<>();
-        if(userInput.contains("(")) {
-            Matcher matcher = Pattern.compile("\\(|\\)|[+*x/^\\-]|-*\\d+(\\.\\d*)*").matcher(userInput);
-            while (matcher.find()) {
-                if (matcher.group().matches("-")) {
-                    tokens.add("-1");
-                    tokens.add("*");
-                } else tokens.add(matcher.group());
-
-            }
-
-            while (tokens.contains("(")) {
-                tokens = parenthesis(tokens);
-            }
+        Matcher matcher = Pattern.compile("-*\\d+(\\.\\d*)*|[+*x/^\\-]").matcher(userInput);
+        while(matcher.find()){
+            tokens.add(matcher.group());
         }
-        else {
-            Matcher matcher = Pattern.compile("\\(|\\)|-*\\d+(\\.\\d*)*|[+*x/^\\-]").matcher(userInput);
-            while (matcher.find()) {
-                tokens.add(matcher.group());
-            }
+        while(tokens.contains("(")){
+            tokens=parenthesis(tokens);
         }
+
+
+        System.out.println(tokens);
 
         System.out.println(calculate(tokens));
         return tokens;
@@ -73,19 +63,8 @@ public class Main {
                             }
                         }
 
-                        for(int i=0;i<Z.size()-1;i++){
-                            if(Z.get(i).matches("-*\\d") && Z.get(i+1).matches("-*\\d")){
-                                Z.add(i+1,"+");
-                            }
-                            if(Z.get(i).matches("-*\\d+(\\.\\d*)*") && Z.get(i+1).matches("-1")){
-                                Z.add(i+1,"+");
-                            }
-                        }
-                      //  System.out.println(Z);
-
-                        String newValue= String.valueOf(calculate(Z));
-                        //System.out.println("Inside the parenthesis "+newValue);
-                        tokens.set(a,newValue);
+                        String AA= String.valueOf(calculate(Z));
+                        tokens.set(a,AA);
                         a=0;
                         Z.clear();
                         break;
@@ -101,15 +80,6 @@ public class Main {
 
     public double calculate(List<String> tokens){
         String A="";
-        for(int i=0;i<tokens.size()-1;i++){
-            if(tokens.get(i).matches("-*\\d") && tokens.get(i+1).matches("-*\\d")){
-                tokens.add(i+1,"+");
-            }
-            if(tokens.get(i).matches("-*\\d+(\\.\\d*)*") && tokens.get(i+1).matches("-1")){
-                tokens.add(i+1,"+");
-            }
-        }
-
         for (int i = tokens.size()-1; i>=0; i--) {
             if (tokens.get(i).equals("^")) {
                 A = String.valueOf(Math.pow(Double.parseDouble(tokens.get(i - 1)), Double.parseDouble(tokens.get(i + 1))));
@@ -119,11 +89,7 @@ public class Main {
                 i--;
             }
         }
-        if(tokens.get(0).equals("+")){
-            tokens.remove(0);
-        }
-       System.out.println(tokens);
-
+   //     System.out.println(tokens);
         for (int i =0; i<tokens.size(); i++) {
             if (tokens.get(i).equals("x") || tokens.get(i).equals("*")) {
                 A = String.valueOf((Double.parseDouble(tokens.get(i - 1)) * Double.parseDouble(tokens.get(i + 1))));
@@ -168,14 +134,6 @@ public class Main {
             return finalAnswer;
         }
 
-    }
-    int releaseAnswer(int A){
-        System.out.println(A);
-        return A;
-    }
-    double releaseAnswer(double A){
-        System.out.println(A);
-        return A;
     }
 
     }
